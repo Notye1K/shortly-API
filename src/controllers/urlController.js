@@ -36,3 +36,24 @@ export async function getShorten (req, res){
         res.status(500).send(error)
     }
 }
+
+export async function deleteUrl (req, res){
+    try {
+        const urlId = req.params.id
+        const { id: userId } = res.locals.user
+
+        const {rowCount} = await connection.query(`
+        DELETE FROM urls
+        WHERE id = $1 AND "userId" = ${userId}
+        `, [urlId])
+
+        if(rowCount === 0){
+            res.sendStatus(401)
+        }else{
+            res.sendStatus(204)
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}
