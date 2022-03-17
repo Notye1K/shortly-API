@@ -8,4 +8,5 @@ const urlRouter = Router();
 urlRouter.post('/urls/shorten',validateTokenMiddleware, validateSchemaMiddleware(urlSchema), postShorten);
 urlRouter.get('/urls/:shortUrl', getShorten);
 urlRouter.delete('/urls/:id', validateTokenMiddleware, deleteUrl)
+
 export default urlRouter;
