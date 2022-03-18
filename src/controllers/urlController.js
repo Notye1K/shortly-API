@@ -29,6 +29,9 @@ export async function getShorten (req, res){
         if(rows.length === 0){
             res.sendStatus(404)
         }else{
+            await connection.query(`UPDATE urls
+            SET "visitCount" = "visitCount" + 1
+            WHERE identifier = $1`, [url])
             res.send(rows[0])
         }
     } catch (error) {
