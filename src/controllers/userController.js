@@ -41,7 +41,7 @@ export async function getUserId (req, res) {
     const id = req.params.id
 
     const {rows} = await connection.query(`
-    SELECT u.id AS "uId", u.name, urls.*, SUM(urls."visitCount") AS sum, urls.id AS "urlId"
+    SELECT u.id AS "uId", u.name, urls.*, urls.id AS "urlId"
     FROM users u
     JOIN urls ON u.id=urls."userId"
     WHERE u.id = $1
@@ -51,7 +51,7 @@ export async function getUserId (req, res) {
     const obj = {
       id: rows[0].uId,
       name: rows[0].name,
-      visitCount: rows[0].sum,
+      visitCount: rows.reduce((acc, curr) => acc + curr.visitCount,0),
       shortenedUrls: rows.map(v => {
         return {
           id: v.urlId,
